@@ -2,30 +2,34 @@
 
 ## Purpose
 
-Build a public GitHub portfolio project that demonstrates job-ready QA automation skills using TypeScript and Playwright. The project will test the Expand Testing Notes App through its React UI and its matching REST API.
+Build a public GitHub portfolio project that demonstrates job-ready QA automation skills using TypeScript and Playwright. The project will test the complete Expand Testing practice platform. The Notes App will serve as the main business application for functional UI, REST API, and cross-layer coverage, while the platform's standalone exercises will demonstrate a broad range of browser-automation techniques.
 
 The project is intended for an intermediate automation learner. Development will follow a guided hands-on workflow: the owner writes and runs each step in Visual Studio Code while Codex explains, reviews, and helps diagnose problems.
 
 ## System Under Test
 
-- UI: `https://practice.expandtesting.com/notes/app`
+- Platform: `https://practice.expandtesting.com/`
+- Notes App UI: `https://practice.expandtesting.com/notes/app`
 - API documentation: `https://practice.expandtesting.com/notes/api/api-docs/`
 - API base URL: `https://practice.expandtesting.com/notes/api`
 
-The UI and API belong to the same Notes application. This allows UI tests, API tests, and cross-layer end-to-end tests to exercise one coherent business domain.
+The Notes UI and API belong to the same application. This allows UI tests, API tests, and cross-layer end-to-end tests to exercise one coherent business domain. The remaining platform pages provide focused exercises for controls, browser behavior, dynamic content, diagnostics, authentication, and edge cases.
 
 ## Scope
 
 The first public release will contain:
 
-- At least 20 UI tests.
+- Automated coverage for every Playwright-compatible UI exercise listed in the versioned site inventory.
+- Complete functional coverage of the Notes App's supported first-party workflows.
 - At least 20 API tests.
 - Three cross-layer end-to-end tests.
 - Chromium smoke checks on every push and pull request.
 - Full Chromium, Firefox, and WebKit regression through scheduled or manual GitHub Actions execution.
 - Playwright HTML reports and GitHub Actions artifacts.
 
-The first release will not include Allure, Cucumber, performance testing, accessibility testing, visual comparison testing, or a second system under test. These may be considered after the core portfolio is stable.
+The complete UI scope will be delivered through phased releases in the same repository. The initial framework milestone will not attempt to finish the entire platform inventory.
+
+The project will not include Allure, Cucumber, load or performance testing, full accessibility auditing, or visual comparison testing. These may be considered after the core portfolio is stable. Cypress-specific exercises and unsafe third-party-provider flows are not required to have executable Playwright tests; they must instead appear in a documented exclusions table with the page, reason, evidence, and suggested alternative.
 
 ## Architecture
 
@@ -42,9 +46,10 @@ UI and API layers remain independently testable. Cross-layer tests may use both 
 
 ## Repository Components
 
-- `tests/ui/`: browser tests for registration, authentication, profiles, and notes behavior.
+- `tests/ui/notes/`: functional browser tests for registration, authentication, profiles, and notes behavior.
+- `tests/ui/exercises/`: browser tests grouped by UI technique and platform exercise.
 - `tests/api/`: REST tests for users, authentication, profiles, notes, validation, and authorization.
-- `tests/e2e/`: a small number of UI/API integration journeys.
+- `tests/e2e/`: three UI/API integration journeys.
 - `pages/`: Page Objects for registration, login, profile, home, and note interactions.
 - `api/`: typed clients for users, authentication, and notes.
 - `fixtures/`: temporary accounts, authenticated contexts, test notes, and cleanup.
@@ -55,7 +60,15 @@ UI and API layers remain independently testable. Cross-layer tests may use both 
 
 ## Planned Test Coverage
 
-### UI
+### UI Inventory and Coverage Policy
+
+At project start, the platform's published exercise list will be captured in a versioned inventory. Each entry will record its URL, capability category, Playwright compatibility, planned test file, implementation status, and any exclusion decision. The inventory is the source of truth for UI scope and completion.
+
+Every Playwright-compatible exercise will receive at least one meaningful automated test. Complex exercises will receive additional positive, negative, boundary, or edge-case scenarios when those scenarios demonstrate distinct behavior. The project will not inflate the test count with duplicate assertions that add no coverage.
+
+Intentionally flaky exercises will be automated as demonstrations of detection and retry analysis, tagged separately, and excluded from the normal blocking CI suites. An exercise may be excluded from executable automation only when it is specific to another test runner, requires unsafe or unavailable third-party access, or cannot be exercised reliably without violating the external provider's rules. Every exclusion requires a documented reason and suggested alternative.
+
+### Notes App UI
 
 The UI suite will cover at least the following areas:
 
@@ -73,6 +86,25 @@ The UI suite will cover at least the following areas:
 - Note deletion and confirmation behavior.
 - Empty states and error messaging.
 - Authorization-sensitive navigation.
+
+### Standalone UI Exercises
+
+The inventory-driven suite will cover all Playwright-compatible exercises across these capability groups:
+
+- Inputs, forms, validation, checkboxes, radio buttons, selects, sliders, and key presses.
+- Registration, login, one-time passwords, password recovery, Basic Auth, Digest Auth, cookies, and session behavior.
+- Dynamic IDs, challenging locators, deep DOM structures, Shadow DOM, disappearing elements, shifting content, and dynamic controls.
+- AJAX, client-side delays, slow resources, dynamic loading, progress behavior, and auto-wait conditions.
+- Static, dynamic, sortable, filterable, and paginated tables.
+- File uploads, downloads, and authenticated downloads.
+- Drag and drop, hover, context menus, tooltips, menus, autocomplete, scrollbars, and infinite scrolling.
+- JavaScript dialogs, notifications, modal behavior, multiple windows, redirects, and nested frames.
+- Geolocation and other browser permission scenarios supported by Playwright contexts.
+- Broken images, JavaScript errors, console output, HTTP status codes, HTTP headers, and network-related diagnostics.
+- A/B behavior, randomized content, and intentionally flaky examples handled through non-blocking demonstration tests.
+- Additional first-party sample applications and exercises discovered by the versioned inventory.
+
+The suite will use capability-focused assertions instead of merely verifying that each page opens.
 
 ### API
 
@@ -119,13 +151,26 @@ Tests must be independent, order-agnostic, and safe to execute in parallel. Secr
 
 ## Execution Strategy
 
+### Delivery Phases
+
+The broad UI scope will be implemented in this order:
+
+1. Core framework, inventory, and Notes App foundations.
+2. Standard controls, inputs, forms, and authentication exercises.
+3. Dynamic DOM, waits, loading, tables, and pagination.
+4. Files, browser interactions, frames, windows, and permissions.
+5. Diagnostics, network behavior, intentional flakiness, authentication variants, and remaining edge cases.
+6. Cross-browser stabilization, exclusions review, and final portfolio documentation.
+
+Each phase will have its own implementation plan, guided learning steps, verification, and commits. A later phase will not block publishing the completed earlier phases as visible portfolio progress.
+
 ### Fast feedback
 
-Every push and pull request will run formatting, linting, TypeScript checks, API smoke tests, and Chromium UI smoke tests.
+Every push and pull request will run formatting, linting, TypeScript checks, API smoke tests, and a stable Chromium UI smoke suite. Intentionally flaky demonstrations and the complete exercise inventory will not run as blocking pull-request checks.
 
 ### Full regression
 
-A weekly GitHub Actions schedule and a manual `workflow_dispatch` trigger will run the broader API suite and UI regression across Chromium, Firefox, and WebKit. The weekly run will start on Sunday at 04:00 UTC. Local commands will allow running one test, one suite, smoke tests, or the full regression.
+A weekly GitHub Actions schedule and a manual `workflow_dispatch` trigger will run the broader API suite and all stable, implemented UI inventory tests across Chromium, Firefox, and WebKit. The weekly run will start on Sunday at 04:00 UTC. Tagged intentional-flakiness demonstrations will run in a separate non-blocking job. Local commands will allow running one test, one capability group, one phase, smoke tests, stable regression, flaky demonstrations, or the complete implemented inventory.
 
 ## Reporting and Portfolio Presentation
 
@@ -137,6 +182,7 @@ The README will include:
 - Architecture overview.
 - Technology list.
 - Test coverage summary.
+- UI exercise inventory with implementation and exclusion status.
 - Setup and execution instructions.
 - CI badge.
 - Example report evidence.
@@ -163,7 +209,9 @@ Before a change is considered complete, the relevant checks must pass:
 
 The first release is complete when:
 
-- The agreed minimum UI, API, and cross-layer tests are implemented and stable.
+- Every Playwright-compatible UI exercise in the captured platform inventory has meaningful automated coverage.
+- Every unsupported or unsafe exercise has a reviewed, evidence-backed entry in the exclusions table.
+- The Notes App functional suite, minimum API suite, and three cross-layer tests are implemented and stable.
 - Tests are independent and clean up their generated data.
 - Fast and full GitHub Actions workflows execute as designed.
 - Reports and failure artifacts are available from GitHub Actions.

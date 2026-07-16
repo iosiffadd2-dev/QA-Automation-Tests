@@ -7,4 +7,5 @@ blob-report/
 !.env.example
 .firecrawl/
 .superpowers/
+docs/
 *.log

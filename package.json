@@ -6,23 +6,33 @@
   "directories": {
     "doc": "docs"
   },
- "scripts": {
-  "test": "playwright test",
-  "test:api": "playwright test tests/api",
-  "test:ui": "playwright test tests/ui",
-  "test:smoke": "playwright test --grep @smoke",
-  "test:headed": "playwright test --headed",
-  "test:debug": "playwright test --debug",
-  "report": "playwright show-report"
-},
+  "scripts": {
+    "test": "playwright test",
+    "test:api": "playwright test tests/api",
+    "test:ui": "playwright test tests/ui",
+    "test:smoke": "playwright test --grep @smoke",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "report": "playwright show-report",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "check": "npm run typecheck && npm run lint && npm run format:check"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.61.1",
     "@types/node": "^26.1.1",
+    "eslint": "^10.7.0",
+    "globals": "^17.7.0",
+    "prettier": "^3.9.5",
     "tsx": "^4.23.1",
-    "typescript": "^7.0.2"
+    "typescript": "6.0.3",
+    "typescript-eslint": "^8.64.0"
   }
 }

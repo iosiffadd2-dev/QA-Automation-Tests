@@ -52,6 +52,7 @@
 ### Task 1: Bootstrap a Runnable Playwright Project
 
 **Files:**
+
 - Create: `package.json`
 - Create: `package-lock.json`
 - Create: `playwright.config.ts`
@@ -59,6 +60,7 @@
 - Create: `.gitignore`
 
 **Interfaces:**
+
 - Consumes: Node.js 24 and npm from the workstation.
 - Produces: `npm.cmd test`, Playwright test discovery under `tests/`, and a passing API health smoke test.
 
@@ -123,9 +125,7 @@ export default defineConfig({
 import { expect, test } from '@playwright/test';
 
 test('@smoke Notes API reports healthy status', async ({ request }) => {
-  const response = await request.get(
-    'https://practice.expandtesting.com/notes/api/health-check',
-  );
+  const response = await request.get('https://practice.expandtesting.com/notes/api/health-check');
 
   expect(response.status()).toBe(200);
   expect(await response.json()).toMatchObject({
@@ -174,6 +174,7 @@ Expected: the commit author is `iosiffadd2-dev <iosiffadd2@gmail.com>`.
 ### Task 2: Add Strict Type, Lint, and Formatting Checks
 
 **Files:**
+
 - Create: `tsconfig.json`
 - Create: `eslint.config.mjs`
 - Create: `.prettierrc.json`
@@ -181,6 +182,7 @@ Expected: the commit author is `iosiffadd2-dev <iosiffadd2@gmail.com>`.
 - Modify: `package.json`
 
 **Interfaces:**
+
 - Consumes: Task 1 npm project.
 - Produces: `npm.cmd run typecheck`, `npm.cmd run lint`, `npm.cmd run format`, and `npm.cmd run format:check`.
 
@@ -299,11 +301,13 @@ git commit -m "chore: add TypeScript and code quality gates"
 ### Task 3: Validate Environment Configuration With TDD
 
 **Files:**
+
 - Create: `tests/unit/environment.spec.ts`
 - Create: `utils/environment.ts`
 - Modify: `playwright.config.ts`
 
 **Interfaces:**
+
 - Consumes: `NodeJS.ProcessEnv`.
 - Produces: `loadEnvironment(source?: NodeJS.ProcessEnv): EnvironmentConfig` where `EnvironmentConfig` contains `webBaseUrl` and `notesApiBaseUrl` as normalized URL strings.
 
@@ -415,6 +419,7 @@ git commit -m "feat: validate test environment configuration"
 ### Task 4: Generate a Versioned UI Exercise Inventory
 
 **Files:**
+
 - Create: `tests/unit/ui-exercise.spec.ts`
 - Create: `inventory/ui-exercise.ts`
 - Create: `scripts/build-ui-inventory.ts`
@@ -422,6 +427,7 @@ git commit -m "feat: validate test environment configuration"
 - Modify: `package.json`
 
 **Interfaces:**
+
 - Consumes: raw `{ name, url }` links found under platform exercise headings.
 - Produces: `normalizeExercises(raw): UiExercise[]` and a deterministic JSON inventory whose initial entries have `compatibility: "review-required"` and `status: "planned"`.
 
@@ -575,10 +581,12 @@ git commit -m "feat: capture UI exercise inventory"
 ### Task 5: Generate Valid Unique User Data
 
 **Files:**
+
 - Create: `tests/unit/user.factory.spec.ts`
 - Create: `data/user.factory.ts`
 
 **Interfaces:**
+
 - Consumes: optional string prefix.
 - Produces: `buildUser(prefix?: string): TestUser` with unique `name`, `email`, and API-valid `password` fields.
 
@@ -649,12 +657,14 @@ git commit -m "feat: add unique user data factory"
 ### Task 6: Add the First Typed Notes API Lifecycle
 
 **Files:**
+
 - Create: `api/models.ts`
 - Create: `api/users.client.ts`
 - Create: `tests/api/user-lifecycle.spec.ts`
 - Modify: `tests/api/health.spec.ts`
 
 **Interfaces:**
+
 - Consumes: Playwright `APIRequestContext`, `EnvironmentConfig`, and `TestUser`.
 - Produces: `UsersClient.register(user)`, `UsersClient.login(email, password)`, and `UsersClient.deleteAccount(token)` returning both the HTTP status and a typed response body.
 
@@ -762,10 +772,7 @@ export class UsersClient {
     return this.toResult<ApiEnvelope<RegisteredUser>>(response);
   }
 
-  async login(
-    email: string,
-    password: string,
-  ): Promise<ApiResult<ApiEnvelope<AuthenticatedUser>>> {
+  async login(email: string, password: string): Promise<ApiResult<ApiEnvelope<AuthenticatedUser>>> {
     const response = await this.request.post(`${this.baseUrl}/users/login`, {
       form: { email, password },
     });
@@ -822,10 +829,12 @@ git commit -m "feat: test Notes API user lifecycle"
 ### Task 7: Add the First Notes UI Page Object and Login Test
 
 **Files:**
+
 - Create: `pages/login.page.ts`
 - Create: `tests/ui/notes/login.spec.ts`
 
 **Interfaces:**
+
 - Consumes: Playwright `Page`, an API-created `TestUser`, and `UsersClient` cleanup.
 - Produces: `LoginPage.open()`, `LoginPage.login(email, password)`, and a stable UI login smoke scenario.
 
@@ -926,11 +935,13 @@ git commit -m "feat: test Notes UI login journey"
 ### Task 8: Publish Phase 1 CI Evidence and Documentation
 
 **Files:**
+
 - Create: `.github/workflows/ci.yml`
 - Create: `README.md`
 - Modify: `package.json`
 
 **Interfaces:**
+
 - Consumes: all Phase 1 checks and smoke tests.
 - Produces: a blocking Chromium GitHub Actions job, uploaded HTML report on failure, and clone-to-run documentation.
 
@@ -989,7 +1000,7 @@ jobs:
 
 - [ ] **Step 3: Create `README.md`**
 
-```markdown
+````markdown
 # Expand Testing Playwright QA Portfolio
 
 TypeScript and Playwright automation portfolio covering the Expand Testing Notes UI, Notes REST API, and the platform's standalone UI exercises.
@@ -1014,6 +1025,7 @@ TypeScript and Playwright automation portfolio covering the Expand Testing Notes
 npm.cmd ci
 npx.cmd playwright install chromium
 ```
+````
 
 ## Run checks
 
@@ -1039,7 +1051,8 @@ Tests express business behavior. Page Objects own UI selectors, API clients own 
 ## Roadmap
 
 The versioned UI inventory drives phased coverage of every Playwright-compatible exercise. Unsupported third-party or runner-specific exercises will be documented with evidence rather than silently skipped.
-```
+
+````
 
 - [ ] **Step 4: Run the same commands CI will run**
 
@@ -1048,7 +1061,7 @@ npm.cmd ci
 npx.cmd playwright install chromium
 npm.cmd run check
 npm.cmd run test:ci
-```
+````
 
 Expected: dependency installation, static checks, API health, API user lifecycle, and UI login smoke tests all pass.
 

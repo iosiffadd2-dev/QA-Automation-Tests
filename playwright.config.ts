@@ -1,4 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
+import { loadEnvironment } from './utils/environment';
+
+const environment = loadEnvironment();
 
 export default defineConfig({
   testDir: './tests',
@@ -8,7 +11,7 @@ export default defineConfig({
   workers: process.env.CI ? 2 : undefined,
   reporter: [['list'], ['html', { outputFolder: 'playwright-report', open: 'never' }]],
   use: {
-    baseURL: 'https://practice.expandtesting.com',
+    baseURL: environment.webBaseUrl,
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',

@@ -6,7 +6,7 @@ test('Radio Buttons', async ({ page }) => {
   const blueRaddioButton = page.getByRole('radio', { name: 'blue' });
   const redRaddioButton = page.getByRole('radio', { name: 'red' });
   const yellowRaddioButton = page.getByRole('radio', { name: 'yellow' });
-  const blackRaddioButton = page.getByRole('radio', { name: 'black' });
+  //const blackRaddioButton = page.getByRole('radio', { name: 'black' });
   const greenRaddioButton = page.locator('#green');
 
   const basketballRaddioButton = page.getByRole('radio', { name: 'basketball' });

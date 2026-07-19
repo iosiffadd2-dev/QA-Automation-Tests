@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 test('@smoke add and remove elements', async ({ page }) => {
- await page.goto('/add-remove-elements');
+  await page.goto('/add-remove-elements');
   await expect(
     page.getByRole('heading', {
       name: 'Add/Remove Elements page for Automation Testing Practice',
